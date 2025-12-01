@@ -31,6 +31,6 @@ Réponse:
 
 # --- 4. Configuration du Tokenizer (Arrêt) ---
 # Ceci est crucial pour empêcher le modèle de générer des boucles infinies ou des parasites.
-PARAMETER stop "Question:"
+PARAMETER stop "</s>"
 PARAMETER stop "</s>"
 PARAMETER stop "<|endoftext|>"
