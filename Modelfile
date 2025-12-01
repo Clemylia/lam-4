@@ -18,7 +18,7 @@ PARAMETER top_p 0.95
 PARAMETER top_k 30
 
 # RÉPONSE MAXIMALE : Limite la longueur pour éviter les longs délires
-PARAMETER num_predict 256 
+PARAMETER num_predict 500
 
 # --- 3. Template de Prompt (Crucial pour le formatage) ---
 # Ceci force Ollama à utiliser votre template minimaliste '### Question: ... ### Réponse:'
