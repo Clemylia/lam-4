@@ -2,7 +2,7 @@
 
 # --- 1. Chemin du Fichier GGUF (À adapter) ---
 # Remplacez ceci par le chemin réel de votre fichier GGUF
-FROM placeholder oour le moment 
+FROM hf.co/Clemylia/Melta-final-gguf 
 
 # --- 2. Paramètres de Génération pour l'Inférénce ---
 # Ajustements pour la stabilité (légèrement plus bas pour un modèle from scratch)
