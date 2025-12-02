@@ -1,37 +1,43 @@
-# Modelfile pour Melta-82M (Clemylia/LES-IA-ETOILES)
-# Configuration alignée sur le nouveau template de chat.
+# Modelfile pour Clemylia-Melta-LLaMA (basé sur le nom du dépôt: clemylia-melta-llama-v1)
 
-# --- 1. Chemin du Fichier GGUF ---
-# Utilisation du chemin Hugging Face fourni
+# --- 1. Chemin du Fichier GGUF (À adapter) ---
+# Le chemin doit pointer vers votre fichier GGUF quantifié.
 FROM hf.co/Clemylia/Melta-gguf
 
-# --- 2. Paramètres de Génération pour la Cohérence ---
-# Ces paramètres sont cruciaux pour stabiliser votre modèle de 82M.
-PARAMETER temperature 0.7 
-PARAMETER top_p 0.95
-PARAMETER top_k 30
-PARAMETER num_predict 500
+# --- 2. Paramètres de Génération pour l'Inférénce ---
+# Un modèle plus petit peut nécessiter une température légèrement plus basse pour plus de rigueur.
 
-# --- 3. TEMPLATE DE PROMPT (Aligné Parfaitement) ---
-# Ce template reflète la structure 'Question: ... ### reponse: ... Réponse:'
+# TEMPÉRATURE : Un peu de créativité pour l'IA, mais stable.
+PARAMETER temperature 0.65 
+
+# TOP_P : Sélection des tokens les plus probables (cohérence).
+PARAMETER top_p 0.9 
+
+# TOP_K : Limite de tokens considérés (qualité).
+PARAMETER top_k 40 
+
+# RÉPONSE MAXIMALE : Limite la longueur à une réponse détaillée (environ 100-200 mots).
+PARAMETER num_predict 256
+
+# --- 3. Template de Prompt (CRUCIAL) ---
+# Le template doit correspondre EXACTEMENT au format d'entraînement:
+# "Question: {q}\nRéponse: {r}<EOS_TOKEN>"
 TEMPLATE """
-{{- range .Conversations -}}
-{{- range .Messages -}}
-{{- if eq .Role "user" -}}
-Question:
-{{ .Content }}
-{{- else if eq .Role "assistant" -}}
-### reponse:
-{{ .Content }}
-{{- end -}}
-{{- end -}}
-{{- end -}}
+Question: {{ prompt }}
 Réponse:
 """
+# Note : {{ prompt }} contient l'entrée de l'utilisateur (le message.content)
 
 # --- 4. Configuration du Tokenizer (Arrêt) ---
-# Ceci est crucial pour empêcher le modèle de générer des boucles infinies ou des parasites.
-# Nous ajoutons les délimiteurs de dialogue utilisés dans le template.
-PARAMETER stop "</s>"
-PARAMETER stop "</s"
+# Ces jetons stoppent la génération lorsque le modèle pense qu'il commence une nouvelle conversation ou a terminé.
+
+# Le token de fin de séquence LLaMA/votre modèle
+PARAMETER stop "</s>" 
+
+# Les jetons de début d'une nouvelle entrée utilisateur ou d'un formatage interne
+PARAMETER stop "Question:"
+PARAMETER stop "Réponse:"
+PARAMETER stop "###"
+
+# Pour la compatibilité générale (bien que LLaMA n'utilise pas celui-ci par défaut)
 PARAMETER stop "<|endoftext|>"
