@@ -2,7 +2,7 @@
 
 # --- 1. Chemin du Fichier GGUF (À adapter) ---
 # Remplacez ceci par le chemin réel de votre fichier GGUF
-FROM hf.co/mradermacher/LAM-4-ZERO-F-GGUF 
+FROM hf.co/mradermacher/Sala-GGUF 
 
 # --- 2. Paramètres de Génération pour l'Inférénce ---
 # Ajustements pour la stabilité (légèrement plus bas pour un modèle from scratch)
@@ -14,7 +14,12 @@ PARAMETER num_predict 256
 # --- 3. Template de Prompt (CORRECTION CRUCIALE) ---
 # Ceci réplique le format de votre script d'inférence Python.
 # L'entrée de l'utilisateur ({{ .Prompt }}) est insérée là où la question se trouve.
-TEMPLATE """### Instruction {{ .Prompt }} ### Response:\n"""
+TEMPLATE """User:{{ .Prompt }} Sala\n:"""
+
+SYSTEM """
+You are Sala. You are an AI assistant designed by Clemylia, an 18/19 year old teenager creating her own AI models.you are a customizable and stretchable
+AI.
+"""
 
 # --- 4. Configuration du Tokenizer (Arrêt) ---
 # Stoppe la génération dès que le modèle essaie de commencer une nouvelle conversation.
